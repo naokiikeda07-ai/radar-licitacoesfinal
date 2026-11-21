@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radar Nacional de Licitações | Engenharia Civil</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-hover: #1d4ed8;
+      --accent: #f59e0b;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --info: #0284c7;
+      --danger: #dc2626;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: #fff;
+      padding: 1.25rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .brand h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand p {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+    }
+
+    .status-sync {
+      font-size: 0.78rem;
+      background: rgba(255,255,255,0.12);
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      display: inline-block;
+      margin-top: 0.35rem;
+      color: #fde68a;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.55rem 1rem;
+      border-radius: 6px;
+      border: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      color: #0f172a;
+    }
+
+    .btn-primary:hover {
+      background-color: #fbbf24;
+    }
+
+    .btn-outline {
+      background-color: rgba(255,255,255,0.1);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(255,255,255,0.2);
+    }
+
+    .btn-secondary {
+      background-color: #e2e8f0;
+      color: #1e293b;
+    }
+
+    .btn-secondary:hover {
+      background-color: #cbd5e1;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .kpi-card {
+      background: var(--card);
+      padding: 1.25rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .kpi-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .kpi-value {
+      font-size: 1.65rem;
+      font-weight: 700;
+      margin-top: 0.35rem;
+      color: var(--text);
+    }
+
+    .kpi-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    .filters-box {
+      background: var(--card);
+      padding: 1.25rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+      gap: 0.85rem;
+      align-items: end;
+    }
+
+    @media (max-width: 1100px) {
+      .filters-box { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .filters-box { grid-template-columns: 1fr; }
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.88rem;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary-hover);
+      box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15);
+    }
+
+    .table-card {
+      background: var(--card);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      overflow-x: auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px;
+    }
+
+    th {
+      background-color: #f8fafc;
+      text-align: left;
+      padding: 0.85rem 1rem;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 0.95rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88rem;
+      vertical-align: top;
+    }
+
+    tr:hover td { background-color: #f8fafc; }
+
+    .badge-uf {
+      display: inline-block;
+      background: #e0e7ff;
+      color: #1e3a8a;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.78rem;
+    }
+
+    .badge-fonte {
+      display: inline-block;
+      background: #ecfdf5;
+      color: #065f46;
+      font-weight: 600;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      border: 1px solid #a7f3d0;
+    }
+
+    .badge-cat {
+      display: inline-block;
+      background: #f1f5f9;
+      color: #334155;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 0.35rem;
+      border: 1px solid #cbd5e1;
+    }
+
+    .badge-urgente {
+      display: inline-block;
+      background: #fee2e2;
+      color: #991b1b;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      margin-top: 0.25rem;
+    }
+
+    .orgao-title {
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+
+    .municipio-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .objeto-text {
+      color: #334155;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      max-width: 430px;
+    }
+
+    .valor-cell {
+      font-weight: 700;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+
+    .status-select {
+      padding: 0.35rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .status-Nova { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+    .status-Analise { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+    .status-Orcando { background: #dcfce7; color: #166534; border-color: #86efac; }
+    .status-Descartada { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+
+    .actions-cell {
+      display: flex;
+      gap: 0.4rem;
+      white-space: nowrap;
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.65rem;
+      font-size: 0.78rem;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+    }
+
+    .btn-sm:hover { background: #f1f5f9; }
+
+    .btn-link {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .btn-link:hover { background: var(--primary-hover); }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 50;
+    }
+
+    .modal-backdrop.active { display: flex; }
+
+    .modal-content {
+      background: #fff;
+      border-radius: 12px;
+      max-width: 680px;
+      width: 100%;
+      padding: 1.5rem;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--muted);
+      line-height: 1;
+    }
+
+    .detail-row { margin-bottom: 0.85rem; }
+
+    .detail-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .detail-val {
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-top: 0.15rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <h1>🏗️ Radar Nacional de Licitações — Engenharia Civil</h1>
+      <p>Varredura Total • PNCP & Compras.gov.br • Todos os Estados</p>
+      <span class="status-sync" id="statusSync">Sincronizando base de dados...</span>
+    </div>
+    <div class="header-actions">
+      <input type="file" id="jsonFileInput" accept=".json" style="display: none;" />
+      <button class="btn btn-primary" onclick="document.getElementById('jsonFileInput').click()">
+        📥 Importar JSON Manual
+      </button>
+      <button class="btn btn-outline" onclick="exportarCSV()">
+        📊 Exportar Excel (CSV)
+      </button>
+      <button class="btn btn-outline" onclick="carregarDados(true)">
+        🔄 Atualizar Agora
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Editais Encontrados</div>
+        <div class="kpi-value" id="kpiTotal">0</div>
+        <div class="kpi-sub">Obras no filtro atual</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Volume Financeiro</div>
+        <div class="kpi-value" id="kpiValor">R$ 0,00</div>
+        <div class="kpi-sub">Soma dos valores estimados</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Em Orçamento</div>
+        <div class="kpi-value" id="kpiOrcando" style="color: var(--success);">0</div>
+        <div class="kpi-sub">Selecionadas para disputa</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Novas / Sem Triagem</div>
+        <div class="kpi-value" id="kpiNovas" style="color: var(--info);">0</div>
+        <div class="kpi-sub">Aguardando análise técnica</div>
+      </div>
+    </section>
+
+    <section class="filters-box">
+      <div class="form-group">
+        <label for="filtroBusca">Palavra-chave, objeto ou órgão</label>
+        <input type="text" id="filtroBusca" placeholder="Ex: pavimentação, escola, drenagem, ponte..." oninput="aplicarFiltros()" />
+      </div>
+
+      <div class="form-group">
+        <label for="filtroUF">Estado (UF)</label>
+        <select id="filtroUF" onchange="aplicarFiltros()">
+          <option value="">Todo o Brasil</option>
+          <option value="AC">AC - Acre</option>
+          <option value="AL">AL - Alagoas</option>
+          <option value="AP">AP - Amapá</option>
+          <option value="AM">AM - Amazonas</option>
+          <option value="BA">BA - Bahia</option>
+          <option value="CE">CE - Ceará</option>
+          <option value="DF">DF - Distrito Federal</option>
+          <option value="ES">ES - Espírito Santo</option>
+          <option value="GO">GO - Goiás</option>
+          <option value="MA">MA - Maranhão</option>
+          <option value="MT">MT - Mato Grosso</option>
+          <option value="MS">MS - Mato Grosso do Sul</option>
+          <option value="MG">MG - Minas Gerais</option>
+          <option value="PA">PA - Pará</option>
+          <option value="PB">PB - Paraíba</option>
+          <option value="PR">PR - Paraná</option>
+          <option value="PE">PE - Pernambuco</option>
+          <option value="PI">PI - Piauí</option>
+          <option value="RJ">RJ - Rio de Janeiro</option>
+          <option value="RN">RN - Rio Grande do Norte</option>
+          <option value="RS">RS - Rio Grande do Sul</option>
+          <option value="RO">RO - Rondônia</option>
+          <option value="RR">RR - Roraima</option>
+          <option value="SC">SC - Santa Catarina</option>
+          <option value="SP">SP - São Paulo</option>
+          <option value="SE">SE - Sergipe</option>
+          <option value="TO">TO - Tocantins</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="filtroCategoria">Tipo de Obra</label>
+        <select id="filtroCategoria" onchange="aplicarFiltros()">
+          <option value="">Todas as Categorias</option>
+          <option value="Pavimentação">Pavimentação e Terraplenagem</option>
+          <option value="Edificações">Edificações e Reformas</option>
+          <option value="Saneamento">Saneamento e Drenagem</option>
+          <option value="Infraestrutura/OAE">Infraestrutura e Pontes (OAE)</option>
+          <option value="Outros">Outros Serviços de Engenharia</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="filtroValorMin">Valor Mínimo</label>
+        <select id="filtroValorMin" onchange="aplicarFiltros()">
+          <option value="0">Qualquer valor</option>
+          <option value="100000">Acima de R$ 100 mil</option>
+          <option value="500000">Acima de R$ 500 mil</option>
+          <option value="1000000">Acima de R$ 1 milhão</option>
+          <option value="5000000">Acima de R$ 5 milhões</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="filtroStatus">Status no Funil</label>
+        <select id="filtroStatus" onchange="aplicarFiltros()">
+          <option value="">Todos os Status</option>
+          <option value="Nova">Nova</option>
+          <option value="Analise">Em Análise</option>
+          <option value="Orcando">Orçando</option>
+          <option value="Descartada">Descartada</option>
+        </select>
+      </div>
+
+      <button class="btn btn-secondary" onclick="limparFiltros()">Limpar</button>
+    </section>
+
+    <section class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Local / Órgão</th>
+            <th>Objeto da Licitação</th>
+            <th>Valor Estimado</th>
+            <th>Abertura</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaCorpo"></tbody>
+      </table>
+      <div id="emptyState" class="empty-state" style="display: none;">
+        Nenhuma licitação encontrada com os filtros selecionados.
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="modalDetalhes" onclick="fecharModalFora(event)">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <span class="badge-uf" id="modalUF">UF</span>
+          <span class="badge-fonte" id="modalFonte">PNCP</span>
+          <span class="badge-cat" id="modalCat">Categoria</span>
+          <h3 id="modalOrgao" style="margin-top: 0.5rem;">Órgão Licitante</h3>
+          <p id="modalMunicipio" style="font-size: 0.85rem; color: var(--muted);">Município</p>
+        </div>
+        <button class="modal-close" onclick="fecharModal()">&times;</button>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">ID Controle / Modalidade</div>
+        <div class="detail-val" id="modalId">-</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Objeto Completo</div>
+        <div class="detail-val" id="modalObjeto" style="background: #f8fafc; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border);">-</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="detail-row">
+          <div class="detail-label">Valor Total Estimado</div>
+          <div class="detail-val" id="modalValor" style="font-weight: 700; color: var(--primary); font-size: 1.1rem;">-</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Data de Abertura da Proposta</div>
+          <div class="detail-val" id="modalAbertura">-</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+        <button class="btn btn-secondary" onclick="fecharModal()">Fechar</button>
+        <a id="modalLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          Abrir Edital Oficial ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DADOS_EXEMPLO = [
+      {
+        id: "EXEMPLO-001",
+        fonte: "Demonstração",
+        modalidade: "Concorrência - Eletrônica",
+        orgao: "PREFEITURA MUNICIPAL DE SÃO CARLOS",
+        uf: "SP",
+        municipio: "São Carlos",
+        categoria: "Pavimentação",
+        objeto: "Contratação de empresa especializada em engenharia civil para execução de pavimentação asfáltica em CBUQ, guias, sarjetas e sinalização viária.",
+        valor_estimado: 3450000.00,
+        data_abertura: new Date(Date.now() + 2 * 86400000).toISOString(),
+        status: "Nova",
+        link: "https://pncp.gov.br/app/editais"
+      },
+      {
+        id: "EXEMPLO-002",
+        fonte: "Demonstração",
+        modalidade: "Concorrência - Eletrônica",
+        orgao: "SECRETARIA DE ESTADO DE OBRAS PÚBLICAS DO PARÁ (SEOP)",
+        uf: "PA",
+        municipio: "Belém",
+        categoria: "Edificações",
+        objeto: "Construção de Escola Estadual de Ensino Médio com 12 salas de aula, quadra poliesportiva coberta e laboratórios.",
+        valor_estimado: 8920000.50,
+        data_abertura: new Date(Date.now() + 7 * 86400000).toISOString(),
+        status: "Orcando",
+        link: "https://pncp.gov.br/app/editais"
+      }
+    ];
+
+    let licitacoes = [];
+    let licitacoesFiltradas = [];
+
+    function classificarCategoria(texto) {
+      const t = (texto || "").toLowerCase();
+      if (t.includes("paviment") || t.includes("recapeamento") || t.includes("asfált") || t.includes("asfalt") || t.includes("terraplenagem") || t.includes("cbuq")) return "Pavimentação";
+      if (t.includes("drenagem") || t.includes("saneamento") || t.includes("esgoto") || t.includes("água") || t.includes("galeria") || t.includes("adutora")) return "Saneamento";
+      if (t.includes("ponte") || t.includes("viaduto") || t.includes("rodovia") || t.includes("infraestrutura") || t.includes("arte especial") || t.includes("passarela")) return "Infraestrutura/OAE";
+      if (t.includes("escola") || t.includes("ubs") || t.includes("hospital") || t.includes("reforma") || t.includes("edificação") || t.includes("edificacao") || t.includes("construção") || t.includes("construcao") || t.includes("quadra") || t.includes("predial")) return "Edificações";
+      return "Outros";
+    }
+
+    function formatarMoeda(valor) {
+      if (!valor || Number(valor) === 0) return "Sigiloso / N/I";
+      return Number(valor).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    }
+
+    function formatarData(dataStr) {
+      if (!dataStr) return "Não informada";
+      const d = new Date(dataStr);
+      if (isNaN(d.getTime())) return dataStr;
+      return d.toLocaleDateString("pt-BR") + " " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+    }
+
+    function ehUrgente(dataStr) {
+      if (!dataStr) return false;
+      const d = new Date(dataStr);
+      if (isNaN(d.getTime())) return false;
+      const diffDias = (d.getTime() - Date.now()) / 86400000;
+      return diffDias >= 0 && diffDias <= 3;
+    }
+
+    function salvarLocal() {
+      localStorage.setItem("radar_licitacoes_eng_v2", JSON.stringify(licitacoes));
+    }
+
+    async function carregarDados(notificar = false) {
+      const syncLabel = document.getElementById("statusSync");
+      const salvo = localStorage.getItem("radar_licitacoes_eng_v2");
+      let mapaStatus = {};
+
+      if (salvo) {
+        const antigos = JSON.parse(salvo);
+        antigos.forEach(item => { mapaStatus[item.id] = item.status; });
+        licitacoes = antigos;
+      } else {
+        licitacoes = [...DADOS_EXEMPLO];
+      }
+
+      try {
+        const resposta = await fetch("licitacoes_hoje.json?v=" + Date.now());
+        if (resposta.ok) {
+          const dadosReais = await resposta.json();
+          if (Array.isArray(dadosReais) && dadosReais.length > 0) {
+            licitacoes = dadosReais.map(item => ({
+              ...item,
+              categoria: item.categoria || classificarCategoria(item.objeto),
+              status: mapaStatus[item.id] || item.status || "Nova"
+            }));
+            salvarLocal();
+            syncLabel.textContent = `✅ Base sincronizada: ${licitacoes.length} editais reais carregados`;
+            if (notificar) alert(`Base atualizada com ${licitacoes.length} licitações!`);
+          } else {
+            syncLabel.textContent = "⚠️ Arquivo JSON vazio — execute o robô coletor_total.py";
+          }
+        } else {
+          syncLabel.textContent = "ℹ️ Modo offline/local — clique em Importar JSON ou suba no GitHub";
+        }
+      } catch (e) {
+        syncLabel.textContent = "ℹ️ Modo arquivo local — importe 'licitacoes_hoje.json' ou hospede no GitHub";
+      }
+
+      aplicarFiltros();
+    }
+
+    function alterarStatus(id, novoStatus) {
+      const item = licitacoes.find(l => l.id === id);
+      if (item) {
+        item.status = novoStatus;
+        salvarLocal();
+        aplicarFiltros();
+      }
+    }
+
+    function aplicarFiltros() {
+      const busca = document.getElementById("filtroBusca").value.toLowerCase().trim();
+      const uf = document.getElementById("filtroUF").value;
+      const cat = document.getElementById("filtroCategoria").value;
+      const valorMin = Number(document.getElementById("filtroValorMin").value || 0);
+      const status = document.getElementById("filtroStatus").value;
+
+      licitacoesFiltradas = licitacoes.filter(item => {
+        const matchBusca = !busca ||
+          (item.objeto || "").toLowerCase().includes(busca) ||
+          (item.orgao || "").toLowerCase().includes(busca) ||
+          (item.municipio || "").toLowerCase().includes(busca);
+        const matchUF = !uf || item.uf === uf;
+        const matchCat = !cat || item.categoria === cat;
+        const matchValor = valorMin === 0 || (Number(item.valor_estimado) || 0) >= valorMin;
+        const matchStatus = !status || item.status === status;
+
+        return matchBusca && matchUF && matchCat && matchValor && matchStatus;
+      });
+
+      atualizarKPIs();
+      renderizarTabela();
+    }
+
+    function limparFiltros() {
+      document.getElementById("filtroBusca").value = "";
+      document.getElementById("filtroUF").value = "";
+      document.getElementById("filtroCategoria").value = "";
+      document.getElementById("filtroValorMin").value = "0";
+      document.getElementById("filtroStatus").value = "";
+      aplicarFiltros();
+    }
+
+    function atualizarKPIs() {
+      const total = licitacoesFiltradas.length;
+      const somaValor = licitacoesFiltradas.reduce((acc, item) => acc + (Number(item.valor_estimado) || 0), 0);
+      const orcando = licitacoesFiltradas.filter(i => i.status === "Orcando").length;
+      const novas = licitacoesFiltradas.filter(i => i.status === "Nova").length;
+
+      document.getElementById("kpiTotal").textContent = total;
+      document.getElementById("kpiValor").textContent = formatarMoeda(somaValor);
+      document.getElementById("kpiOrcando").textContent = orcando;
+      document.getElementById("kpiNovas").textContent = novas;
+    }
+
+    function renderizarTabela() {
+      const tbody = document.getElementById("tabelaCorpo");
+      const empty = document.getElementById("emptyState");
+      tbody.innerHTML = "";
+
+      if (licitacoesFiltradas.length === 0) {
+        empty.style.display = "block";
+        return;
+      }
+
+      empty.style.display = "none";
+
+      licitacoesFiltradas.forEach(item => {
+        const urgente = ehUrgente(item.data_abertura);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>
+            <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.25rem; flex-wrap:wrap;">
+              <span class="badge-uf">${item.uf || "BR"}</span>
+              <span class="badge-fonte">${item.fonte || "PNCP"}</span>
+              <span class="municipio-sub">${item.municipio || ""}</span>
+            </div>
+            <div class="orgao-title">${item.orgao || "Órgão não informado"}</div>
+            <span class="badge-cat">${item.categoria}</span>
+          </td>
+          <td>
+            <div class="objeto-text" title="${(item.objeto || "").replace(/"/g, '&quot;')}">
+              ${item.objeto || "-"}
+            </div>
+          </td>
+          <td class="valor-cell">${formatarMoeda(item.valor_estimado)}</td>
+          <td style="white-space: nowrap; font-size: 0.82rem; color: var(--muted);">
+            <div>${formatarData(item.data_abertura)}</div>
+            ${urgente ? '<span class="badge-urgente">⚠️ Abre em breve</span>' : ''}
+          </td>
+          <td>
+            <select class="status-select status-${item.status}" onchange="alterarStatus('${item.id}', this.value)">
+              <option value="Nova" ${item.status === "Nova" ? "selected" : ""}>🔵 Nova</option>
+              <option value="Analise" ${item.status === "Analise" ? "selected" : ""}>🟡 Em Análise</option>
+              <option value="Orcando" ${item.status === "Orcando" ? "selected" : ""}>🟢 Orçando</option>
+              <option value="Descartada" ${item.status === "Descartada" ? "selected" : ""}>🔴 Descartada</option>
+            </select>
+          </td>
+          <td>
+            <div class="actions-cell">
+              <button class="btn-sm" onclick="abrirModal('${item.id}')">Detalhes</button>
+              <a class="btn-sm btn-link" href="${item.link}" target="_blank" rel="noopener noreferrer">Edital ↗</a>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function abrirModal(id) {
+      const item = licitacoes.find(l => l.id === id);
+      if (!item) return;
+
+      document.getElementById("modalUF").textContent = item.uf || "BR";
+      document.getElementById("modalFonte").textContent = item.fonte || "PNCP";
+      document.getElementById("modalCat").textContent = item.categoria;
+      document.getElementById("modalOrgao").textContent = item.orgao;
+      document.getElementById("modalMunicipio").textContent = item.municipio || "";
+      document.getElementById("modalId").textContent = `${item.id} ${item.modalidade ? '• ' + item.modalidade : ''}`;
+      document.getElementById("modalObjeto").textContent = item.objeto;
+      document.getElementById("modalValor").textContent = formatarMoeda(item.valor_estimado);
+      document.getElementById("modalAbertura").textContent = formatarData(item.data_abertura);
+      document.getElementById("modalLink").href = item.link || "#";
+
+      document.getElementById("modalDetalhes").classList.add("active");
+    }
+
+    function fecharModal() {
+      document.getElementById("modalDetalhes").classList.remove("active");
+    }
+
+    function fecharModalFora(e) {
+      if (e.target.id === "modalDetalhes") fecharModal();
+    }
+
+    document.getElementById("jsonFileInput").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const novosDados = JSON.parse(event.target.result);
+          if (!Array.isArray(novosDados)) {
+            alert("O arquivo JSON precisa conter uma lista de licitações.");
+            return;
+          }
+
+          let adicionados = 0;
+          const idsExistentes = new Set(licitacoes.filter(l => !l.id.startsWith("EXEMPLO")).map(l => l.id));
+          licitacoes = licitacoes.filter(l => !l.id.startsWith("EXEMPLO"));
+
+          novosDados.forEach(item => {
+            const idItem = item.id || String(Math.random());
+            if (!idsExistentes.has(idItem)) {
+              licitacoes.unshift({
+                id: idItem,
+                fonte: item.fonte || "PNCP",
+                modalidade: item.modalidade || "",
+                orgao: item.orgao || "Órgão Público",
+                uf: (item.uf || "BR").toUpperCase(),
+                municipio: item.municipio || "",
+                categoria: item.categoria || classificarCategoria(item.objeto),
+                objeto: item.objeto || "",
+                valor_estimado: item.valor_estimado || 0,
+                data_abertura: item.data_abertura || "",
+                status: item.status || "Nova",
+                link: item.link || "https://pncp.gov.br/app/editais"
+              });
+              idsExistentes.add(idItem);
+              adicionados++;
+            }
+          });
+
+          salvarLocal();
+          aplicarFiltros();
+          document.getElementById("statusSync").textContent = `✅ ${licitacoes.length} editais carregados`;
+          alert(`Importação concluída! ${adicionados} novas licitações adicionadas.`);
+        } catch (err) {
+          alert("Erro ao ler o arquivo JSON.");
+        }
+        e.target.value = "";
+      };
+      reader.readAsText(file);
+    });
+
+    function exportarCSV() {
+      if (licitacoesFiltradas.length === 0) {
+        alert("Não há licitações filtradas para exportar.");
+        return;
+      }
+
+      const cabecalho = ["ID", "Fonte", "UF", "Municipio", "Orgao", "Categoria", "Objeto", "Valor_Estimado", "Data_Abertura", "Status", "Link"];
+      const linhas = licitacoesFiltradas.map(item => [
+        `"${(item.id || "").replace(/"/g, '""')}"`,
+        `"${(item.fonte || "").replace(/"/g, '""')}"`,
+        `"${(item.uf || "").replace(/"/g, '""')}"`,
+        `"${(item.municipio || "").replace(/"/g, '""')}"`,
+        `"${(item.orgao || "").replace(/"/g, '""')}"`,
+        `"${(item.categoria || "").replace(/"/g, '""')}"`,
+        `"${(item.objeto || "").replace(/"/g, '""')}"`,
+        item.valor_estimado || 0,
+        `"${(item.data_abertura || "").replace(/"/g, '""')}"`,
+        `"${(item.status || "").replace(/"/g, '""')}"`,
+        `"${(item.link || "").replace(/"/g, '""')}"`
+      ].join(";"));
+
+      const csvContent = "\uFEFF" + [cabecalho.join(";"), ...linhas].join("\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `licitacoes_engenharia_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    carregarDados();
+  </script>
+</body>
+</html>
